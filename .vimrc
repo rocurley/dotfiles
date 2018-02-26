@@ -57,7 +57,7 @@ Plug 'cespare/vim-toml'
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
-Plug 'Valloric/YouCompleteMe', {'for': ['rust', 'haskell']}
+Plug 'Valloric/YouCompleteMe', {'for': ['rust', 'haskell'], 'do': './install.py --rust-completer'}
 
 call plug#end()
 " }}}
@@ -77,6 +77,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 " }}}
 " Non-plugin settings {{{
-set ttymouse=xterm2
+if !has('nvim')
+  set ttymouse=xterm2
+endif
 set mouse=a
 " }}}
