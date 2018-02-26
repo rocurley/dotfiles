@@ -67,7 +67,7 @@ set t_Co=256
 colorscheme wombat256mod
 " }}}
 " YCM {{{
-command GoDef YcmCompleter GoTo
+nnoremap gd :YcmCompleter GoTo<CR>
 let g:ycm_server_keep_logfiles = 1
 " }}}
 " Syntastic {{{
