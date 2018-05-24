@@ -44,20 +44,28 @@ Plug 'vim-scripts/wombat256.vim'
 
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'vim-airline/vim-airline'
-Plug 'vim-syntastic/syntastic'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+Plug 'autozimu/LanguageClient-neovim', {
+  \ 'branch': 'next',
+  \ 'do': 'bash install.sh',
+  \ }
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-" Plug 'w0rp/ale', { 'for': 'haskell' }
 
 Plug 'cespare/vim-toml'
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
-
-Plug 'Valloric/YouCompleteMe', {'for': ['rust', 'haskell'], 'do': './install.py --rust-completer'}
 
 call plug#end()
 " }}}
@@ -66,16 +74,23 @@ call plug#end()
 set t_Co=256
 colorscheme wombat256mod
 " }}}
-" YCM {{{
-nnoremap gd :YcmCompleter GoTo<CR>
-let g:ycm_server_keep_logfiles = 1
+" Language Client{{{
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ }
+command LCinfo call LanguageClient_textDocument_hover()
+command LCdefinition  call LanguageClient_textDocument_definition()
+command LCimplementation call LanguageClient_textDocument_implementation()
+command LCrename call LanguageClient_textDocument_rename()
+command LCsymbols call LanguageClient_textDocument_documentSymbol()
+command LCreferences call LanguageClient_textDocument_references()
+command LCformat call LanguageClient_textDocument_formatting()
+" command LCformat call LanguageClient_textDocument_rangeFormatting()
+" command LCsymbols LanguageClient_workspace_symbol()
 " }}}
-" Syntastic {{{
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-" }}}
+let g:deoplete#enable_at_startup = 1
 " Non-plugin settings {{{
 if !has('nvim')
   set ttymouse=xterm2
