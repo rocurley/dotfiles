@@ -1,41 +1,5 @@
-" vim-latex-suite defaults {{{
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-filetype plugin on
-
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
-filetype indent on
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
-
-let g:Tex_DefaultTargetFormat='pdf'
-
-" this is mostly a matter of taste. but LaTeX looks good with just a bit
-" " of indentation.
-set shiftwidth=2
-set tabstop=2
-set expandtab
-set ai
-" " TIP: if you write your \label's as \label{fig:something}, then if you
-" " type in \ref{fig: and press <C-n> you will automatically cycle through
-" " all the figure labels. Very useful!
-" set iskeyword+=:
-"
-"
-" }}}
-"
-syntax on
+filetype plugin indent on
+set nocompatible
 
 " vim-plug {{{
 call plug#begin('~/.vim/plugged')
@@ -46,6 +10,11 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'junegunn/vim-easy-align'
+Plug 'wsdjeg/vim-fetch'
 
 Plug 'autozimu/LanguageClient-neovim', {
   \ 'branch': 'next',
@@ -54,10 +23,11 @@ Plug 'autozimu/LanguageClient-neovim', {
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+" Plug 'Shougo/deoplete.nvim'
+" Plug 'roxma/nvim-yarp'
+" Plug 'roxma/vim-hug-neovim-rpc'
 endif
+Plug 'w0rp/ale', {'for': 'javascript'}
 
 Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
@@ -67,7 +37,30 @@ Plug 'cespare/vim-toml'
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
+Plug 'fatih/vim-go'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+
+Plug 'pangloss/vim-javascript'
+Plug 'briancollins/vim-jst'
+Plug 'mxw/vim-jsx'
+" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 call plug#end()
+" }}}
+
+" ALE {{{
+let g:ale_linter_aliases = {'scratch': 'python'}
+let g:ale_sign_column_always = 1
+let g:ale_linters = {
+      \'python': ['flake8'],
+      \'javascript': ['flow']
+      \ }
+"let g:ale_set_quickfix = 1
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" }}}
+
+" Javascript {{{
+let g:javascript_plugin_flow = 1
 " }}}
 
 " Colorscheme {{{
@@ -79,7 +72,10 @@ set hidden
 
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'python': ['pyls'],
     \ }
+"\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
+"\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 command LCinfo call LanguageClient_textDocument_hover()
 command LCdefinition  call LanguageClient_textDocument_definition()
 command LCimplementation call LanguageClient_textDocument_implementation()
@@ -91,9 +87,25 @@ command LCformat call LanguageClient_textDocument_formatting()
 " command LCsymbols LanguageClient_workspace_symbol()
 " }}}
 let g:deoplete#enable_at_startup = 1
+"
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 " Non-plugin settings {{{
+set shiftwidth=2
+set tabstop=2
+set expandtab
+set ai
+syntax on
 if !has('nvim')
   set ttymouse=xterm2
 endif
 set mouse=a
+let g:python3_host_prog = '/home/rcurley/.pyenv/versions/3.6.7/bin/python'
+"let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
+set guicursor=
 " }}}
+source ~/.vim/work.vimrc
+
