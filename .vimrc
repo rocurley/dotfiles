@@ -38,7 +38,6 @@ Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
 Plug 'fatih/vim-go'
-Plug 'zchee/deoplete-go', { 'do': 'make'}
 
 Plug 'pangloss/vim-javascript'
 Plug 'briancollins/vim-jst'
@@ -88,6 +87,10 @@ command LCformat call LanguageClient_textDocument_formatting()
 " command LCsymbols LanguageClient_workspace_symbol()
 " }}}
 let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('omni_patterns', {
+\ 'go': '[^. *\t]\.\w*',
+\})
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 "
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
