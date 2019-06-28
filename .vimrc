@@ -73,6 +73,7 @@ set hidden
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'python': ['pyls'],
+    \ 'ruby': ['solargraph', 'stdio'],
     \ }
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 "\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
@@ -106,6 +107,7 @@ set mouse=a
 let g:python3_host_prog = '/home/rcurley/.pyenv/versions/3.6.7/bin/python'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
+au BufRead,BufNewFile *.avsc setfiletype json
 " }}}
 source ~/.vim/work.vimrc
 
