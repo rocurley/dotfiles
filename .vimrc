@@ -15,6 +15,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/vim-easy-align'
 Plug 'wsdjeg/vim-fetch'
+" Plug 'ap/vim-css-color' " unaccpetable performence degredation with large
+" folds
 
 Plug 'autozimu/LanguageClient-neovim', {
   \ 'branch': 'next',
@@ -27,7 +29,7 @@ else
 " Plug 'roxma/nvim-yarp'
 " Plug 'roxma/vim-hug-neovim-rpc'
 endif
-Plug 'w0rp/ale', {'for': 'javascript'}
+Plug 'w0rp/ale'
 
 Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
@@ -45,23 +47,24 @@ Plug 'mxw/vim-jsx'
 " Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 call plug#end()
 " }}}
-
 " ALE {{{
 let g:ale_linter_aliases = {'scratch': 'python'}
 let g:ale_sign_column_always = 1
 let g:ale_linters = {
       \'python': ['flake8'],
-      \'javascript': ['flow']
+      \'javascript': ['flow'],
+      \'go': ['gopls'],
+      \'sql': ['sqlint'],
       \ }
+let ale_go_golangci_lint_options = '--fast'
+let  g:ale_go_golangci_lint_package = 1
 "let g:ale_set_quickfix = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " }}}
-
 " Javascript {{{
 let g:javascript_plugin_flow = 1
 " }}}
-
 " Colorscheme {{{
 set t_Co=256
 colorscheme wombat256mod
@@ -86,17 +89,23 @@ command LCformat call LanguageClient_textDocument_formatting()
 " command LCformat call LanguageClient_textDocument_rangeFormatting()
 " command LCsymbols LanguageClient_workspace_symbol()
 " }}}
+" Deoplete {{{
 let g:deoplete#enable_at_startup = 1
 call deoplete#custom#option('omni_patterns', {
 \ 'go': '[^. *\t]\.\w*',
 \})
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-"
+" }}}
+" FzF {{{
+" let g:fzf_command_prefix = 'Fz'
+" }}}
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" EasyAlign {{{
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" }}}
 " Non-plugin settings {{{
 set shiftwidth=2
 set tabstop=2
@@ -107,10 +116,18 @@ if !has('nvim')
   set ttymouse=xterm2
 endif
 set mouse=a
-let g:python3_host_prog = '/home/rcurley/.pyenv/versions/3.6.7/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
 au BufRead,BufNewFile *.avsc setfiletype json
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
 " }}}
 source ~/.vim/work.vimrc
 
