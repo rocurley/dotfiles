@@ -40,7 +40,6 @@ Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
 Plug 'fatih/vim-go'
-
 Plug 'pangloss/vim-javascript'
 Plug 'briancollins/vim-jst'
 Plug 'mxw/vim-jsx'
@@ -75,6 +74,7 @@ set hidden
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'python': ['pyls'],
+    \ 'go': ['gopls'],
     \ 'ruby': ['solargraph', 'stdio'],
     \ }
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
