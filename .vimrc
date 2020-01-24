@@ -52,12 +52,13 @@ let g:ale_sign_column_always = 1
 let g:ale_linters = {
       \'python': ['flake8'],
       \'javascript': ['flow'],
-      \'go': ['gopls'],
       \'sql': ['sqlint'],
       \ }
 let ale_go_golangci_lint_options = '--fast'
 let  g:ale_go_golangci_lint_package = 1
-"let g:ale_set_quickfix = 1
+" This is swapped from what I'd like, but FZF will only use quickfix.
+let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " }}}
@@ -77,6 +78,8 @@ let g:LanguageClient_serverCommands = {
     \ 'go': ['gopls'],
     \ 'ruby': ['solargraph', 'stdio'],
     \ }
+let g:LanguageClient_diagnosticsEnable = 1
+let g:LanguageClient_diagnosticsList = "Location"
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 "\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 command LCinfo call LanguageClient_textDocument_hover()
@@ -120,6 +123,7 @@ let g:python3_host_prog = '/usr/bin/python3'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
 au BufRead,BufNewFile *.avsc setfiletype json
+autocmd BufWritePre * :call LanguageClient#textDocument_formatting_sync()
 inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 inoremap <Left> <Nop>
