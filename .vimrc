@@ -43,6 +43,7 @@ Plug 'fatih/vim-go'
 Plug 'pangloss/vim-javascript'
 Plug 'briancollins/vim-jst'
 Plug 'mxw/vim-jsx'
+Plug 'leafgarland/typescript-vim'
 " Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 call plug#end()
 " }}}
@@ -77,9 +78,16 @@ let g:LanguageClient_serverCommands = {
     \ 'python': ['pyls'],
     \ 'go': ['gopls'],
     \ 'ruby': ['solargraph', 'stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'typescript.tsx': ['javascript-typescript-stdio'],
     \ }
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsEnable = 1
+let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_diagnosticsList = "Location"
+let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 "\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 command LCinfo call LanguageClient_textDocument_hover()
@@ -117,13 +125,13 @@ set ai
 syntax on
 if !has('nvim')
   set ttymouse=xterm2
+  set inccommand=nosplit
 endif
 set mouse=a
 let g:python3_host_prog = '/usr/bin/python3'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
 au BufRead,BufNewFile *.avsc setfiletype json
-autocmd BufWritePre * :call LanguageClient#textDocument_formatting_sync()
 inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 inoremap <Left> <Nop>
@@ -132,6 +140,9 @@ noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
+if has('nvim-0.3.2') || has("patch-8.1.0360")
+  set diffopt=filler,internal,algorithm:histogram,indent-heuristic
+endif
 " }}}
 source ~/.vim/work.vimrc
 
