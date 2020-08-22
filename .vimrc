@@ -133,5 +133,7 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 " }}}
-source ~/.vim/work.vimrc
+if filereadable(expand("~/.vim/work.vimrc"))
+  source ~/.vim/work.vimrc
+endif
 
