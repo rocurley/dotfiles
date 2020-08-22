@@ -31,18 +31,21 @@ else
 endif
 Plug 'w0rp/ale'
 
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+
+Plug 'yuezk/vim-js'
+Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'cespare/vim-toml'
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
 Plug 'fatih/vim-go'
-Plug 'pangloss/vim-javascript'
 Plug 'briancollins/vim-jst'
-Plug 'mxw/vim-jsx'
+Plug 'yuezk/vim-js'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'leafgarland/typescript-vim'
 " Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 call plug#end()
 " }}}
@@ -77,9 +80,16 @@ let g:LanguageClient_serverCommands = {
     \ 'python': ['pyls'],
     \ 'go': ['gopls'],
     \ 'ruby': ['solargraph', 'stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'typescriptreact': ['javascript-typescript-stdio'],
+    \ 'haskell': ['hie-wrapper'],
     \ }
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsEnable = 1
+let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_diagnosticsList = "Location"
+let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 "\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 command LCinfo call LanguageClient_textDocument_hover()
@@ -115,6 +125,9 @@ set tabstop=2
 set expandtab
 set ai
 syntax on
+if has('nvim')
+  set inccommand=split
+endif
 if !has('nvim')
   set ttymouse=xterm2
 endif
@@ -123,15 +136,10 @@ let g:python3_host_prog = '/usr/bin/python3'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
 au BufRead,BufNewFile *.avsc setfiletype json
-autocmd BufWritePre * :call LanguageClient#textDocument_formatting_sync()
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Left> <Nop>
-inoremap <Right> <Nop>
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
+if has('nvim-0.3.2') || has("patch-8.1.0360")
+  set diffopt=filler,internal,algorithm:histogram,indent-heuristic
+endif
+set hlsearch
 " }}}
 if filereadable(expand("~/.vim/work.vimrc"))
   source ~/.vim/work.vimrc
