@@ -31,9 +31,10 @@ else
 endif
 Plug 'w0rp/ale'
 
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+
+Plug 'yuezk/vim-js'
+Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'cespare/vim-toml'
 
@@ -87,6 +88,7 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'typescriptreact': ['javascript-typescript-stdio'],
+    \ 'haskell': ['hie-wrapper'],
     \ }
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsEnable = 1
@@ -148,5 +150,8 @@ au BufRead,BufNewFile *.avsc setfiletype json
 if has('nvim-0.3.2') || has("patch-8.1.0360")
   set diffopt=filler,internal,algorithm:histogram,indent-heuristic
 endif
+set hlsearch
 " }}}
-source ~/.vim/work.vimrc
+if filereadable(expand("~/.vim/work.vimrc"))
+  source ~/.vim/work.vimrc
+endif
