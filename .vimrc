@@ -38,14 +38,16 @@ Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'cespare/vim-toml'
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
-
+Plug 'psf/black', { 'branch': 'stable' }
 Plug 'fatih/vim-go'
 Plug 'briancollins/vim-jst'
 Plug 'yuezk/vim-js'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'leafgarland/typescript-vim'
-" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'npm install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 call plug#end()
 " }}}
 " ALE {{{
@@ -67,6 +69,9 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " Javascript {{{
 let g:javascript_plugin_flow = 1
 " }}}
+" Python {{{
+autocmd BufWritePre *.py execute ':Black'
+" }}}
 " Colorscheme {{{
 set t_Co=256
 colorscheme wombat256mod
@@ -75,7 +80,7 @@ colorscheme wombat256mod
 set hidden
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'rust': ['rust-analyzer'],
     \ 'python': ['pyls'],
     \ 'go': ['gopls'],
     \ 'ruby': ['solargraph', 'stdio'],
@@ -88,6 +93,7 @@ let g:LanguageClient_diagnosticsEnable = 1
 let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_diagnosticsList = "Location"
 let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
+let g:LanguageClient_settingsPath = "~/.vim/settings.json"
 "\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 "\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
 command LCinfo call LanguageClient_textDocument_hover()
@@ -99,6 +105,7 @@ command LCreferences call LanguageClient_textDocument_references()
 command LCformat call LanguageClient_textDocument_formatting()
 " command LCformat call LanguageClient_textDocument_rangeFormatting()
 " command LCsymbols LanguageClient_workspace_symbol()
+
 " }}}
 " Deoplete {{{
 let g:deoplete#enable_at_startup = 1
@@ -108,6 +115,10 @@ call deoplete#custom#option('omni_patterns', {
 " }}}
 " FzF {{{
 " let g:fzf_command_prefix = 'Fz'
+" }}}
+" Prettier {{{
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
 " }}}
 " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 " EasyAlign {{{
@@ -139,4 +150,3 @@ if has('nvim-0.3.2') || has("patch-8.1.0360")
 endif
 " }}}
 source ~/.vim/work.vimrc
-
