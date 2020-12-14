@@ -17,18 +17,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'wsdjeg/vim-fetch'
 " Plug 'ap/vim-css-color' " unaccpetable performence degredation with large
 " folds
-
-Plug 'autozimu/LanguageClient-neovim', {
-  \ 'branch': 'next',
-  \ 'do': 'bash install.sh',
-  \ }
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-" Plug 'Shougo/deoplete.nvim'
-" Plug 'roxma/nvim-yarp'
-" Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'w0rp/ale'
 
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
@@ -80,40 +69,42 @@ colorscheme wombat256mod
 " Language Client{{{
 set hidden
 
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rust-analyzer'],
-    \ 'python': ['pyls'],
-    \ 'go': ['gopls'],
-    \ 'ruby': ['solargraph', 'stdio'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'typescriptreact': ['javascript-typescript-stdio'],
-    \ 'haskell': ['hie-wrapper'],
-    \ }
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsEnable = 1
-let g:LanguageClient_loggingLevel = 'DEBUG'
-let g:LanguageClient_diagnosticsList = "Location"
-let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log') 
-let g:LanguageClient_settingsPath = "~/.vim/settings.json"
-"\ 'javascript': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
-"\ 'javascript.jsx': ['/home/rcurley/.yarn/bin/flow-language-server', '--stdio'],
-command LCinfo call LanguageClient_textDocument_hover()
-command LCdefinition  call LanguageClient_textDocument_definition()
-command LCimplementation call LanguageClient_textDocument_implementation()
-command LCrename call LanguageClient_textDocument_rename()
-command LCsymbols call LanguageClient_textDocument_documentSymbol()
-command LCreferences call LanguageClient_textDocument_references()
-command LCformat call LanguageClient_textDocument_formatting()
-" command LCformat call LanguageClient_textDocument_rangeFormatting()
-" command LCsymbols LanguageClient_workspace_symbol()
+"let g:LanguageClient_serverCommands = {
+"    \ 'rust': ['rust-analyzer'],
+"    \ 'python': ['pyls'],
+"    \ 'go': ['gopls'],
+"    \ 'ruby': ['solargraph', 'stdio'],
+"    \ 'javascript': ['javascript-typescript-stdio'],
+"    \ 'typescript': ['javascript-typescript-stdio'],
+"    \ 'typescriptreact': ['javascript-typescript-stdio'],
+"    \ 'haskell': ['hie-wrapper'],
+"    \ }
 
-" }}}
-" Deoplete {{{
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('omni_patterns', {
-\ 'go': '[^. *\t]\.\w*',
-\})
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
 " }}}
 " FzF {{{
 " let g:fzf_command_prefix = 'Fz'
