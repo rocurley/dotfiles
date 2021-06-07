@@ -38,6 +38,10 @@ Plug 'leafgarland/typescript-vim'
 Plug 'prettier/vim-prettier', {
   \ 'do': 'npm install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+Plug 'inkarkat/vim-ingo-library'
+Plug 'xolox/vim-misc'
+Plug 'inkarkat/vim-AdvancedDiffOptions'
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 call plug#end()
 " }}}
 " ALE {{{
@@ -105,6 +109,9 @@ function! s:show_documentation()
   endif
 endfunction
 
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
 " }}}
 " FzF {{{
 " let g:fzf_command_prefix = 'Fz'
@@ -120,6 +127,11 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" }}}
+" Clipboard {{{
+if exists('$TMUX')
+  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
+endif
 " }}}
 " Non-plugin settings {{{
 set shiftwidth=2
@@ -138,10 +150,11 @@ let g:python3_host_prog = '/usr/bin/python3'
 "let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set guicursor=
 au BufRead,BufNewFile *.avsc setfiletype json
-if has('nvim-0.3.2') || has("patch-8.1.0360")
-  set diffopt=filler,internal,algorithm:histogram,indent-heuristic
-endif
+" if has('nvim-0.3.2') || has("patch-8.1.0360")
+  " set diffopt=filler,internal,algorithm:histogram,indent-heuristic
+" endif
 set hlsearch
+set number relativenumber
 " }}}
 if filereadable(expand("~/.vim/work.vimrc"))
   source ~/.vim/work.vimrc
