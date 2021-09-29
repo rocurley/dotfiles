@@ -42,6 +42,7 @@ Plug 'inkarkat/vim-ingo-library'
 Plug 'xolox/vim-misc'
 Plug 'inkarkat/vim-AdvancedDiffOptions'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+Plug 'vim-latex/vim-latex', {'for': ['latex', 'tex']}
 call plug#end()
 " }}}
 " ALE {{{
@@ -73,17 +74,6 @@ colorscheme wombat256mod
 " Language Client{{{
 set hidden
 
-"let g:LanguageClient_serverCommands = {
-"    \ 'rust': ['rust-analyzer'],
-"    \ 'python': ['pyls'],
-"    \ 'go': ['gopls'],
-"    \ 'ruby': ['solargraph', 'stdio'],
-"    \ 'javascript': ['javascript-typescript-stdio'],
-"    \ 'typescript': ['javascript-typescript-stdio'],
-"    \ 'typescriptreact': ['javascript-typescript-stdio'],
-"    \ 'haskell': ['hie-wrapper'],
-"    \ }
-
 " Use <c-space> to trigger completion.
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
@@ -109,9 +99,13 @@ function! s:show_documentation()
   endif
 endfunction
 
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json']
 " }}}
 " FzF {{{
 " let g:fzf_command_prefix = 'Fz'
