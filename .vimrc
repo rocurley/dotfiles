@@ -130,6 +130,7 @@ endif
 " Non-plugin settings {{{
 set shiftwidth=2
 set tabstop=2
+set softtabstop=2
 set expandtab
 set ai
 syntax on
@@ -148,7 +149,7 @@ au BufRead,BufNewFile *.avsc setfiletype json
   " set diffopt=filler,internal,algorithm:histogram,indent-heuristic
 " endif
 set hlsearch
-set number relativenumber
+set nu
 " }}}
 if filereadable(expand("~/.vim/work.vimrc"))
   source ~/.vim/work.vimrc
