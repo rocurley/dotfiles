@@ -18,7 +18,7 @@ Plug 'wsdjeg/vim-fetch'
 " Plug 'ap/vim-css-color' " unaccpetable performence degredation with large
 " folds
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 
@@ -42,6 +42,8 @@ Plug 'inkarkat/vim-ingo-library'
 Plug 'xolox/vim-misc'
 Plug 'inkarkat/vim-AdvancedDiffOptions'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+Plug 'lbrayner/vim-rzip'
+Plug 'jparise/vim-graphql'
 call plug#end()
 " }}}
 " ALE {{{
@@ -57,8 +59,6 @@ let  g:ale_go_golangci_lint_package = 1
 " This is swapped from what I'd like, but FZF will only use quickfix.
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 1
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " }}}
 " Javascript {{{
 let g:javascript_plugin_flow = 1
@@ -95,6 +95,8 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> <C-k> :call CocAction('diagnosticNext')<cr>
+nmap <silent> <C-j> :call CocAction('diagnosticPrevious')<cr>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
